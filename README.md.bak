@@ -1,0 +1,12 @@
+# Image Diff
+
+## Project Idea
+
+Sometimes, you collect images on the internet or store your images in some folder but cannot remember which images you have downloaded.
+Because of storing images that you have downloaded but can't recall, it could increase disk space usage if the image folder size is tremendously high.
+This app provides some options that will help with your problem.
+
+## Technologies Used
+
+- [Vue 3](https://vuejs.org/)
+- [Electron](https://www.electronjs.org/)

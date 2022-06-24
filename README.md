@@ -1,7 +1,23 @@
-# Vue 3 + Vite
+# The Sussy Image
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Project Idea
 
-## Recommended IDE Setup
+Sometimes, you collect images on the internet or store your images in some folder but cannot remember which images you have downloaded.
+Because of storing images that you have downloaded but can't recall, it could increase disk space usage if the image folder size is tremendously high.
+This app provides some options that could help with your problem.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+## Technologies Used
+
+- [Vue 3 + Vite](https://vuejs.org/)
+- [Electron](https://www.electronjs.org/)
+
+## Desciption
+
+The functionality of checking the duplicate is based on the hash function of itself.
+Although this could help for some particular cases, it still cannot check the inevitable cases like:
+- Files edited
+- Identical to the original but the bitmap, resolution was changed
+
+## Issues
+
+The app was not perfect, the performance was a bit bad, and the options sometimes malfunctioned.
