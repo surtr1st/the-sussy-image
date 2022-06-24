@@ -1,0 +1,46 @@
+.file-large-icon-duplicated
+    margin-top: 2rem
+    margin-left: 2rem
+    margin-right: 1rem
+    width: 55vw
+    height: 650px
+    padding: 1rem
+    border: 3px solid hsl(231, 61%, 58%)
+    border-radius: 7px
+
+.source-text
+    margin-top: 2rem
+    margin-left: 1rem
+    margin-right: 2rem
+    width: 29.5vw
+    height: 650px
+    color: hsl(231, 61%, 58%)
+    padding: 1rem
+    word-break: break-all
+    border: 3px solid hsl(231, 61%, 58%)
+    border-radius: 7px
+
+.file-large-icon-duplicated, .source-text
+    animation: slide-up 300ms ease both
+
+#text-box
+    opacity: 0
+    transform: translateY(100px)
+    transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1)
+
+
+@media screen and (min-height: 768px), screen and (min-width: 768px)
+    .file-large-icon-duplicated
+        width: 55vw
+        height: 635px 
+    .source-text
+        width: 29.5vw
+        height: 635px
+    
+@media screen and (max-width: 768px), screen and (max-height: 768px)
+    .file-large-icon-duplicated
+        width: 55vw
+        height: 635px 
+    .source-text
+        width: 29.5vw
+        height: 635px

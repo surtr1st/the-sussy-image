@@ -1,0 +1,86 @@
+@keyframes slide-down
+    0% 
+        opacity: 0
+        transform: translateY(-100px)
+    100%
+        opacity: 1
+        transform: translateY(0px)
+
+@keyframes slide-up
+    0%
+        opacity: 0
+        transform: translateY(100px)
+    100%
+        opacity: 1
+        transform: translateY(0px)
+
+@keyframes slide-down-reverse
+    0% 
+        opacity: 1
+        transform: translateY(0px)
+    100%
+        opacity: 0
+        transform: translateY(-100px)
+
+@keyframes slide-up-reverse
+    0%
+        opacity: 1
+        transform: translateY(0px)
+    100%
+        opacity: 0
+        transform: translateY(100px)
+
+@keyframes scale-up 
+    0%
+        opacity: 0
+        transform: scale(0)
+    100%
+        opacity: 1
+        transform: scale(1)
+
+@keyframes fade-into
+    0%
+        opacity: 0
+        transform: translateX(100px)
+    100%
+        opacity: 1
+        transform: translateX(0px)
+        
+@keyframes fade-away 
+    0% 
+        opacity: 1
+        transform: translateX(0px)
+    100%
+        opacity: 0
+        transform: translateX(-100px)
+
+@keyframes click-up
+    0%
+        transform: scale(1)
+
+    50%
+        transform: scale(.7)
+
+    100%
+        transform: scale(1)
+
+.fading-in
+    animation: fade-into 500ms ease both
+
+.fading-out
+    animation: fade-away 500ms ease both
+
+.slide-upward
+    animation: slide-up 500ms ease both
+
+.slide-downward
+    animation: slide-down 500ms ease both
+
+.scale-up
+    animation: scale-up 300ms ease both
+
+.slide-upward-reverse
+    animation: slide-up-reverse 500ms ease both
+
+.slide-downward-reverse
+    animation: slide-down-reverse 500ms ease both

@@ -1,0 +1,110 @@
+img
+    width: 20%
+    height: auto
+
+.file-large-icon
+    margin: 2rem
+    width: 575px 
+    height: 500px
+    padding: 1rem
+    border: 3px solid hsl(231, 61%, 58%)
+    border-radius: 7px
+
+.file-large-icon-full
+    margin: 2rem
+    width: 88.5vw
+    height: 650px
+    padding: 1rem
+    border: 3px solid hsl(231, 61%, 58%)
+    border-radius: 7px
+
+.scrollbar
+    margin-left: 30px
+    float: left
+    height: 300px
+    width: 65px
+    overflow-x: hidden
+    overflow-y: scroll
+    margin-bottom: 25px
+
+.force-overflow
+    min-height: 450px
+
+#scrollbar-style::-webkit-scrollbar-track
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3)
+    border-radius: 10px
+
+#scrollbar-style::-webkit-scrollbar
+    width: 12px
+
+#scrollbar-style::-webkit-scrollbar-thumb
+    border-radius: 10px
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3)
+    background-color: #555
+
+.text-center
+    text-align: center
+
+#image 
+    padding: 1px
+    margin: 2px
+    border-radius: 7px
+    opacity: 0
+    transform: translateX(100px)
+    box-shadow: 2px 3px black
+    transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1)
+
+.image-container
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    padding: 15px
+    height: auto
+    width: auto
+
+#image-full, #image-duplicated
+    padding: 1px
+    margin: 2px
+    border-radius: 7px
+    opacity: 0
+    width: 100%
+    height: auto
+    transform: translateX(100px)
+    box-shadow: 2px 3px black
+    transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1)
+
+.image-container-full, .image-container-duplicated
+    display: grid
+    grid-template-columns: repeat( 10 , 1fr )
+    gap: 10px
+    padding: 15px
+
+.image-upload
+    font-family: Poppins
+    text-align: center
+    cursor: pointer
+
+.image-input-hidden
+    opacity: 0
+    position: absolute
+    z-index: -1
+
+@media screen and (min-height: 768px), screen and (min-width: 768px)
+    .file-large-icon
+        height: 600px 
+        width: 680px
+    .file-large-icon-full
+        height: 635px 
+        width: 88.5vw
+    
+@media screen and (max-width: 768px), screen and (max-height: 768px)
+    .file-large-icon
+        height: 500px 
+        width: 575px
+    .file-large-icon-full
+        width: 88.5vw
+        height: 635px 
+
+.border
+    border: 1px solid transparent
+
