@@ -1,5 +1,5 @@
 {
-  "name": "the-sussy-image",
+  "name": "image-diff",
   "private": true,
   "main": "electron-main.js",
   "version": "0.0.0",
