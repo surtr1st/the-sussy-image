@@ -11,7 +11,7 @@ This app provides some options that could help with your problem.
 - [Vue 3 + Vite](https://vuejs.org/)
 - [Electron](https://www.electronjs.org/)
 
-## Desciption
+## Description
 
 The functionality of checking the duplicate is based on the hash function of itself.
 Although this could help for some particular cases, it still cannot check the inevitable cases like:
@@ -20,4 +20,4 @@ Although this could help for some particular cases, it still cannot check the in
 
 ## Issues
 
-The app was not perfect, the performance was a bit bad, and the options sometimes malfunctioned.
+The app was flawed, the performance was a bit bad, and the options sometimes malfunctioned.
