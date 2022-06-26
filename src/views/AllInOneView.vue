@@ -78,7 +78,7 @@
 
 <script setup>
 import 'jszip'
-import { onMounted, onBeforeUnmount, onUnmounted, ref } from 'vue'
+import { onBeforeUnmount, onUnmounted, ref } from 'vue'
 import { FileRetrieve } from '../services/AppReactivity'
 
 const FILES_HASH = ref(new Array()) 
