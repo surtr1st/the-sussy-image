@@ -23,7 +23,7 @@
                 type="file" 
                 :disabled="isDone"
                 @change="chosenDirectory()" 
-                accept="image/*"
+                accept="image/.gif,.jpg,.png"
                 webkitdirectory
                 multiple>
             <label
@@ -46,6 +46,21 @@
                 class="image-input-hidden" 
                 type="submit" 
                 @click="clearImages()">
+            <label
+                for="file-count" 
+                v-show="isLoaded"
+                class="button-start
+                bg-gradient-no-hover gradient-button-no-hover bg-size
+                btn-w-large
+                rounded-small
+                fade-all
+                slide-downward
+                image-upload
+                grid
+                mt-medium
+                balance-x">
+                {{ total }}
+            </label>
         </div>
         <div 
             id="scrollbar-style" 
@@ -63,12 +78,15 @@
 
 <script setup>
 import 'jszip'
-import { onUnmounted, ref } from 'vue'
+import { onMounted, onBeforeUnmount, onUnmounted, ref } from 'vue'
 import { FileRetrieve } from '../services/AppReactivity'
 
-const FILES_HASH = ref(new Array())
+const FILES_HASH = ref(new Array()) 
 const SORTED_FILES = ref(new Array())
+const isLoaded = ref(false)
 const isDone = ref(false)
+const total = ref(0)
+const current = ref(new Array())
 
 /** @DESC Get and add images from chosen directory **/
 const addImagesFromDirectory = () => {
@@ -129,32 +147,39 @@ const addImagesFromDirectory = () => {
     for(const file of sizes.value) {
         SORTED_FILES.value.push(file.fileValue)
     }
-
 }
 
 /** @DESC Get all images data from reactive array data **/
-async function chosenDirectory() {
+const chosenDirectory = async () => {
 
     addImagesFromDirectory()
+
+    isLoaded.value = true
 
     let imageHolder = document.getElementById('image-holder')
 
     for (const file of SORTED_FILES.value) {
+        let image = null
+        await new Promise(resolve => {
+            setTimeout(() => resolve((
+                [
+                    image = document.createElement('img'),
+                    image.setAttribute('id', 'image-full'),
+                    image.src = URL.createObjectURL(file),
+                    imageHolder.appendChild(image)
+                ]
+            )), 10)
+        })
 
-        let image = document.createElement('img');
-        image.setAttribute('id', 'image-full')
-        image.src = URL.createObjectURL(file)
-        imageHolder.appendChild(image)
-
-        let promise = new Promise((resolve) => {
+        await new Promise((resolve) => {
             setTimeout(() => resolve(
                 image.setAttribute('class', 'border fading-in')
             ), 25)
         })
-        await promise
 
         // Read hash function type SHA256 of a file
         var reader = new FileReader()
+
         reader.onload = function (ev) {
             //
             crypto.subtle
@@ -175,13 +200,16 @@ async function chosenDirectory() {
             console.error("Failed to read file", err)
         }
         reader.readAsArrayBuffer(file)
-        
     }
-    doCompare(SORTED_FILES.value.length)
+
+    total.value = SORTED_FILES.value.length
+
+    exportDuplicated()
+
 }
 
 /** @DESC Archive duplicated file hash **/
-function toFindDuplicates(array) {
+const toFindDuplicates = (array) => {
     const uniqueElements = new Set(array);
     const filteredElements = array.filter(item => {
         if (uniqueElements.has(item)) {
@@ -195,52 +223,84 @@ function toFindDuplicates(array) {
 }
 
 /** @DESC Proceed to make a comparison of the chosen image with other images **/
-async function doCompare(len) {
-    let images = document.querySelectorAll('#image-full')
+const exportDuplicated = async () => {
+
+    isDone.value = true
+
+    disabledButton()
+
+    const len = SORTED_FILES.value.length
+
     let a = FILES_HASH.value
 
-    let data = toFindDuplicates(a)
+    const data = toFindDuplicates(a)
 
-    for (let i = 0; i < len; i++) {
-        let promiseStart = new Promise((resolve) => {
-            setTimeout(() => resolve((
-                images[i].classList.add('find')
-            )), 10)
-        })
-        await promiseStart
+    let images = document.querySelectorAll('#image-full')
 
-        let promiseBeforeSkip = new Promise((resolve) => {
-            setTimeout(() => resolve((
-                images[i].classList.remove('find')
-            )), 150)
-        })
-        await promiseBeforeSkip
+    let imageHolder = document.getElementById('image-holder')
 
-        let promiseSkip = new Promise((resolve) => {
-            setTimeout(() => resolve((
-                images[i].classList.add('skip')
-            )), 10)
-        })
-        await promiseSkip
+    let index = 0
 
+    do {
         if (data.length > 0) {
-            for (let j = 0; j < len; j++) {
-                if (a[j] === data[i]) {
-                    images[j].classList.remove('skip')
-                    let promiseBeforeSkip = new Promise((resolve) => {
-                        setTimeout(() => resolve((
-                            images[j].classList.add('reveal')
-                        )), 50)
+            for (let i = 0; i < len; i++) {
+                if (a[i] === data[index]) {
+                    FileRetrieve.duplicated.push(SORTED_FILES.value[i])
+                    index++
+                }
+                else {
+                    await new Promise((resolve) => {
+                        setTimeout(() => resolve(
+                            images[i].classList.add('fading-out')
+                        ), 10)
                     })
-                    await promiseBeforeSkip
-                    FileRetrieve.duplicated.push(SORTED_FILES.value[j])
+                    .then(() => imageHolder.removeChild(images[i]))
                 }
             }
         }
     }
+    while(index < data.length)
 
-    isDone.value = true
+    total.value = current.value.length = imageHolder.childElementCount
+}
 
+
+/** @DESC Clear all images from the container after finish the comparison **/
+const clearImages = async () => {
+
+    let imageHolder = document.getElementById('image-holder')
+    let images = document.querySelectorAll('#image-full')
+
+    const len = images.length
+    console.log(len)
+
+    for(let i = 0; i < len; i++) {
+        let promiseBeforeStart = new Promise((resolve) => {
+            setTimeout(() => resolve(
+                images[i].classList.add('fading-out')
+            ), 25)
+        })
+        await promiseBeforeStart
+    }
+
+    for(let i = 0; i < len; i++) {
+        images[i].removeAttribute('class')
+        imageHolder.removeChild(images[i])
+    }
+
+    FILES_HASH.value = new Array()
+    SORTED_FILES.value = new Array()
+    FileRetrieve.duplicated = new Array()
+
+    total.value = 0
+
+    isDone.value = false
+
+    normalizeButton()
+}
+
+// Change button status
+const disabledButton = async () => {
     let label = document.getElementById('image-input-label')
     await new Promise(resolve => {
         setTimeout(() => resolve((
@@ -262,37 +322,9 @@ async function doCompare(len) {
             ]
         )), 100)
     })
-   
 }
 
-/** @DESC Clear all images from the container after finish the comparison **/
-async function clearImages() {
-
-    let imageHolder = document.getElementById('image-holder')
-    let images = document.querySelectorAll('#image-full')
-
-    const len = SORTED_FILES.value.length
-
-    for(let i = 0; i < len; i++) {
-        let promiseBeforeStart = new Promise((resolve) => {
-            setTimeout(() => resolve(
-                images[i].classList.add('fading-out')
-            ), 25)
-        })
-        await promiseBeforeStart
-    }
-
-    for(let i = 0; i < len; i++) {
-        images[i].removeAttribute('class')
-        imageHolder.removeChild(images[i])
-    }
-
-    FILES_HASH.value = new Array()
-    SORTED_FILES.value = new Array()
-    FileRetrieve.duplicated = new Array()
-
-    isDone.value = false
-
+const normalizeButton = async () => {
     let label = document.getElementById('image-input-label')
     await new Promise(resolve => {
         setTimeout(() => resolve((
@@ -316,18 +348,16 @@ async function clearImages() {
     })
 }
 
-onUnmounted(() => {
-    
-    let imageHolder = document.getElementById('image-holder')
-    let images = document.querySelectorAll('#image-full')
+onBeforeUnmount(() => {
+    let holder = document.getElementById('image-holder')
+    let imgs = document.querySelectorAll('#image-full') 
 
-    const len = SORTED_FILES.value.length
-
-    for(let i = 0; i < len; i++) {
-        images[i].removeAttribute('class')
-        imageHolder.removeChild(images[i])
+    for(let i = 0; i < current.value.length; i++) {
+        holder.removeChild(imgs[i])
     }
+})
 
+onUnmounted(() => {
     FILES_HASH.value = new Array()
     SORTED_FILES.value = new Array()
     FileRetrieve.duplicated = new Array()

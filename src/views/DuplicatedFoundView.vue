@@ -66,7 +66,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    getFile.value.length = 0
+    getFile.value = null
 })
 
 
